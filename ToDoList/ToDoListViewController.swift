@@ -4,8 +4,8 @@ import UIKit
 // Burada ToDoListViewController,UITableViewController'in subclassi
 class ToDoListViewController: UITableViewController {//burada superclassi UITableViewControllera cevirmemiz gerek cunku view controlleri sildik ve table view controllerimizi initial view controller yaptik
 
-    //baslangicta calismasi icin hard coded todolist arrayi olusturuyorum
-    let itemArray = ["Call Chandler", "Buy Eggs", "Get a haircut"]
+    
+    var itemArray = ["Call Chandler", "Buy Eggs", "Get a haircut"]
 
 
     override func viewDidLoad() {
@@ -54,9 +54,35 @@ class ToDoListViewController: UITableViewController {//burada superclassi UITabl
         tableView.deselectRow(at: indexPath, animated: true)//now it's gonna look different. When I select a row it flashes gray briefly but than it goes back to being deselected and white. (It just looks better)
         
         
-        
     }
-    
+    //ADD NEW ITEMS
+    //I want a button allows me to add new items. Easiest way to do this is by adding a bar button item to our ToDoThisViewController.(blue section writes ToDoList on)
+    @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
+        //Here what I want to happen is for a popup or a UIAlertController to show when I press the addbutton and have a textfield in that UIAlert so that I can write a quick todolist item and then append it to the end of my itemArray.
+        var textField = UITextField()
+        
+        let alert = UIAlertController(title: "Add new ToDoList item", message: "", preferredStyle: UIAlertController.Style.alert)//when we write only this code, there's gonna appear a alert that says "Add new ToDoList item"
+        
+       let action = UIAlertAction(title: "Add Item", style: .default) { (action) in//when we add this action, under the alert that says "Add new ToDoList item", we're gonna see a button says "Add Item".this is gonna be the button that we're gonna press once we're done with writing our new ToDoList item
+            //what will happen once the user clicks the Add Item button on our UIAlert
+          self.itemArray.append(textField.text!)
+        self.tableView.reloadData()
+        
+        }
+        
+        //ADDING TEXTFIELD
+    //We're adding a textfield to the alert so we can write what item we wanna add
+       alert.addTextField { (alertTextField) in
+           alertTextField.placeholder = "Create New Item"//yanip sonen imlecin altinda kalan kisim. Biz yazmaya basladigimizda kaybolacak
+        
+        //alertTextField is created only as a local variable inside the closure. So it's a problem to grab what exist in here and print it once the user presses the Add Item button. So we need a local variable inside this IBAction(addButtonPressed) that is accessible to all of these other completion handlers. So we create a textfield up in the IBAction.
+        textField = alertTextField
+       }
+       alert.addAction(action)
+        present(alert, animated: true, completion: nil)//the viewcontroller we wanna present here is the UIAlertController, so it's alert
+        
+        
+    }        
     
     }
 
