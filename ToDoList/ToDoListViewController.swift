@@ -6,10 +6,16 @@ class ToDoListViewController: UITableViewController {//burada superclassi UITabl
 
     
     var itemArray = ["Call Chandler", "Buy Eggs", "Get a haircut"]
+    
+    let defaults = UserDefaults.standard //UserDefaults is an interface to the user's default database where we store a key value pairs persistently launches of our app. User default get saved in a plist file. And that's why everything we put in there has to be a key value pair. So we always need a key that we're gonna use to retrieve the item and then we add the value. The valu e can be anything. It could be an array, a dictionar or string.. any data type. and we can grab it back using the key. To do that we need to find our userdefaults file. In order to do that we need to find the file path of our sand box teht our runs we need to get the ID of the simulator. And we also need the ID of the sandbox where our app lives in. In order to do that we're going to AppDelegate and writing some codes in DidFinishLaunchingWithOptions so we'll print out the path of our userdefaults.(But to be able to see that we have to add a new item to our array and we have to run our app on a simulator not on a real device)
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let items = defaults.array(forKey: "ToDoListArray") as? [String]{
+            itemArray = items
+        }
         
     }
 // TableView Datasource Methods
@@ -65,7 +71,9 @@ class ToDoListViewController: UITableViewController {//burada superclassi UITabl
         
        let action = UIAlertAction(title: "Add Item", style: .default) { (action) in//when we add this action, under the alert that says "Add new ToDoList item", we're gonna see a button says "Add Item".this is gonna be the button that we're gonna press once we're done with writing our new ToDoList item
             //what will happen once the user clicks the Add Item button on our UIAlert
-          self.itemArray.append(textField.text!)
+        self.itemArray.append(textField.text!)
+        
+        self.defaults.set(self.itemArray, forKey: "ToDoListArray")
         self.tableView.reloadData()
         
         }
@@ -83,6 +91,7 @@ class ToDoListViewController: UITableViewController {//burada superclassi UITabl
         
         
     }        
+    
     
     }
 
